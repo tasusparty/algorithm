@@ -1,3 +1,32 @@
+#### [88. 合并两个有序数组](https://leetcode-cn.com/problems/merge-sorted-array/)
+
+```
+class Solution {
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        if (isEmpty(nums1) || isEmpty(nums2)) {
+            return;
+        }
+        // p1 for nums1, p2 for nums2; both of them started at the end
+        int p1 = m - 1;
+        int p2 = n - 1;
+        int cur = m + n - 1;
+        while (p1 != -1 && p2 != -1) {
+            nums1[cur--] = nums1[p1] > nums2[p2] ? nums1[p1--] : nums2[p2--];
+        }
+        if (p1 == -1 && p2 != -1) {
+            while (p2 != -1) {
+                nums1[cur--] = nums2[p2--];
+            }
+        }
+    }
+    private boolean isEmpty(int[] nums) {
+        return nums == null || nums.length == 0;
+    }
+}
+//runtime:0 ms O(n+m)
+//memory:38.7 MB O(1)
+```
+
 #### [21. 合并两个有序链表](https://leetcode-cn.com/problems/merge-two-sorted-lists/)
 
 ```
@@ -27,8 +56,8 @@ class Solution {
         return preHead.next;
     }
 }
-//runtime:1 ms
-//memory:38.2 MB
+//runtime:1 ms O(n+m)
+//memory:38.2 MB O(1)
 ```
 
 ```
@@ -49,8 +78,8 @@ class Solution {
         }
     }
 }
-//runtime:0 ms
-//memory:38 MB
+//runtime:0 ms O(n+m)
+//memory:38 MB O(n+m)
 ```
 
 #### [189. 旋转数组](https://leetcode-cn.com/problems/rotate-array/)
