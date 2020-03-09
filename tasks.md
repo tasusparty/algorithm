@@ -1,3 +1,36 @@
+#### [1. 两数之和](https://leetcode-cn.com/problems/two-sum/)
+
+```
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        if (nums == null || nums.length == 0) {
+            return null;
+        }
+        // convert nums to hashmap
+        HashMap<Integer, Integer> hashmap = convertToHashMap(nums);
+
+        // find value by target-nums[i]
+        for (int i = 0; i < nums.length; i++) {
+            Integer minusIdx = hashmap.get(target - nums[i]);
+            if (minusIdx != null && !minusIdx.equals(i)) {
+                return new int[] {i, minusIdx};
+            }
+        }
+        return null;
+    }
+
+    private HashMap<Integer, Integer> convertToHashMap(int[] nums) {
+        HashMap<Integer, Integer> hashmap = new HashMap(nums.length);
+        for (int i = 0; i < nums.length; i++) {
+            hashmap.put(nums[i], i);
+        }
+        return hashmap;
+    }
+}
+//runtime:4 ms O(n)
+//memory:41.7 MB O(N)
+```
+
 #### [88. 合并两个有序数组](https://leetcode-cn.com/problems/merge-sorted-array/)
 
 ```
