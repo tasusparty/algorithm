@@ -1,3 +1,198 @@
+#### [641. 设计循环双端队列](https://leetcode-cn.com/problems/design-circular-deque/)
+
+```
+class MyCircularDeque {
+    private int size = 0;
+    private int count = 0;
+    // guard node: head, tail
+    DoubleLinkedList head = null;
+    DoubleLinkedList tail = null;
+
+    /** Initialize your data structure here. Set the size of the deque to be k. */
+    public MyCircularDeque(int k) {
+        size = k;
+        head = new DoubleLinkedList(-1);
+        tail = new DoubleLinkedList(-1);
+        head.next = tail;
+        tail.pre = head;
+    }
+    
+    /** Adds an item at the front of Deque. Return true if the operation is successful. */
+    public boolean insertFront(int value) {
+        if (count == size) {
+            return false;
+        }
+        DoubleLinkedList newNode = new DoubleLinkedList(value);
+        DoubleLinkedList temp = head.next;
+        newNode.next = temp;
+        temp.pre = newNode;
+        newNode.pre = head;
+        head.next = newNode;
+        ++count;
+        return true;
+    }
+    
+    /** Adds an item at the rear of Deque. Return true if the operation is successful. */
+    public boolean insertLast(int value) {
+        if (count == size) {
+            return false;
+        }
+        DoubleLinkedList newNode = new DoubleLinkedList(value);
+        DoubleLinkedList temp = tail.pre;
+        newNode.pre = temp;
+        temp.next = newNode;
+        newNode.next = tail;
+        tail.pre = newNode;
+        ++count;
+        return true;
+    }
+    
+    /** Deletes an item from the front of Deque. Return true if the operation is successful. */
+    public boolean deleteFront() {
+        if (count == 0) {
+            return false;
+        }
+        DoubleLinkedList nodeToDelete = head.next;
+        head.next = nodeToDelete.next;
+        nodeToDelete.next.pre = head;
+        --count;
+        return true;
+    }
+    
+    /** Deletes an item from the rear of Deque. Return true if the operation is successful. */
+    public boolean deleteLast() {
+        if (count == 0) {
+            return false;
+        }
+        DoubleLinkedList nodeToDelete = tail.pre;
+        tail.pre = nodeToDelete.pre;
+        nodeToDelete.pre.next = tail;
+        --count;
+        return true;
+    }
+    
+    /** Get the front item from the deque. */
+    public int getFront() {
+        if (count == 0) {
+            return -1;
+        }
+        return head.next.val;
+    }
+    
+    /** Get the last item from the deque. */
+    public int getRear() {
+        if (count == 0) {
+            return -1;
+        }
+        return tail.pre.val;
+    }
+    
+    /** Checks whether the circular deque is empty or not. */
+    public boolean isEmpty() {
+        return count == 0;
+    }
+    
+    /** Checks whether the circular deque is full or not. */
+    public boolean isFull() {
+        return count == size;
+    }
+}
+
+class DoubleLinkedList {
+    public DoubleLinkedList pre;
+    public DoubleLinkedList next;
+    public int val;
+    public DoubleLinkedList(int val) {
+        this.val = val;
+    }
+}
+//runtime:8 ms
+//memory:41.6 MB
+```
+
+```
+class MyCircularDeque {
+    int capacity = 0;
+    int front = 0;
+    int rear = 0;
+    int[] a = null;
+
+    /** Initialize your data structure here. Set the size of the deque to be k. */
+    public MyCircularDeque(int k) {
+        capacity = k + 1;
+        a = new int[capacity];
+    }
+    
+    /** Adds an item at the front of Deque. Return true if the operation is successful. */
+    public boolean insertFront(int value) {
+        if (isFull()) {
+            return false;
+        }
+        front = (front - 1 + capacity) % capacity;
+        a[front] = value;
+        return true;
+    }
+    
+    /** Adds an item at the rear of Deque. Return true if the operation is successful. */
+    public boolean insertLast(int value) {
+        if (isFull()) {
+            return false;
+        }
+        a[rear] = value;
+        rear = (rear + 1) % capacity;
+        return true;
+    }
+    
+    /** Deletes an item from the front of Deque. Return true if the operation is successful. */
+    public boolean deleteFront() {
+        if (isEmpty()) {
+            return false;
+        }
+        front = (front + 1) % capacity;
+        return true;
+    }
+    
+    /** Deletes an item from the rear of Deque. Return true if the operation is successful. */
+    public boolean deleteLast() {
+        if (isEmpty()) {
+            return false;
+        }
+        rear = (rear - 1 + capacity) % capacity;
+        return true;
+
+    }
+    
+    /** Get the front item from the deque. */
+    public int getFront() {
+        if (isEmpty()) {
+            return -1;
+        }
+        return a[front];
+    }
+    
+    /** Get the last item from the deque. */
+    public int getRear() {
+        if (isEmpty()) {
+            return -1;
+        }
+        return a[(rear - 1 + capacity) % capacity];
+    }
+    
+    /** Checks whether the circular deque is empty or not. */
+    public boolean isEmpty() {
+        return front == rear;
+    }
+    
+    /** Checks whether the circular deque is full or not. */
+    public boolean isFull() {
+        return (rear + 1) % capacity == front;
+    }
+}
+
+//runtime:9 ms
+//memory:41.6 MB
+```
+
 #### [1. 两数之和](https://leetcode-cn.com/problems/two-sum/)
 
 ```
