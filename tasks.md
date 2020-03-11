@@ -1,3 +1,40 @@
+#### [42. 接雨水](https://leetcode-cn.com/problems/trapping-rain-water/)
+
+```
+class Solution {
+    public int trap(int[] height) {
+        if (height == null || height.length < 2) {
+            return 0;
+        }
+        int ans = 0;
+        int left = 0;
+        int right = height.length - 1;
+        int maxLeft = 0;
+        int maxRight = 0;
+        while (left < right) {
+            if (height[left] < height[right]) {
+                if (height[left] >= maxLeft) {
+                    maxLeft = height[left];
+                } else {
+                    ans += maxLeft - height[left];
+                }
+                ++left;
+            } else {
+                if (height[right] >= maxRight) {
+                    maxRight = height[right];
+                } else {
+                    ans += maxRight - height[right];
+                }
+                --right;
+            }
+        }
+        return ans;
+    }
+}
+//runtime:1 ms O(n)
+//memory:39 MB O(1)
+```
+
 #### [641. 设计循环双端队列](https://leetcode-cn.com/problems/design-circular-deque/)
 
 ```
