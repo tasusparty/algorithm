@@ -1,3 +1,74 @@
+#### [1071. 字符串的最大公因子](https://leetcode-cn.com/problems/greatest-common-divisor-of-strings/)
+
+```
+class Solution {
+    public String gcdOfStrings(String str1, String str2) {
+        if (!(str1 + str2).equals(str2 + str1)) {
+            return "";
+        }
+        return str1.substring(0, gcd(str1.length(), str2.length()));
+    }
+
+    private int gcd(int num1, int num2) {
+        while (num2 != 0) {
+            int temp = num2;
+            num2 = num1 % num2;
+            num1 = temp;
+        }
+        return num1;
+    }
+}
+//runtime:1 ms
+//memory:38.3 MB
+```
+
+```
+class Solution {
+    public String gcdOfStrings(String str1, String str2) {
+        if (!validStr(str1) || !validStr(str2)) {
+            return "";
+        }
+        HashSet<String> set1 = findDivisors(str1);
+        HashSet<String> set2 = findDivisors(str2);
+        int maxLen = 0;
+        String ans = "";
+        for (String divisor : set1) {
+            if (set2.contains(divisor)) {
+                if (divisor.length() > maxLen) {
+                    maxLen = divisor.length();
+                    ans = divisor;
+                }  
+            }
+        }
+        return ans;              
+    }
+    private boolean validStr(String str) {
+        return str != null && str.length() > 0;
+    }
+    private HashSet<String> findDivisors(String str) {
+        HashSet<String> set = new HashSet();
+        // i: divisor length
+        for (int i = 1; i <= str.length(); i++) {
+            int cur = 0;
+            String divisor = str.substring(0, i);
+            while (cur < str.length()) {
+                if (divisor.equals(str.substring(cur, Math.min(cur + i, str.length())))) {
+                    cur += i;
+                } else {
+                    break;
+                }
+            }
+            if (cur == str.length()) {
+                set.add(divisor);
+            }
+        }
+        return set;
+    }
+}
+//runtime:90 ms O(n^2)
+//memory:42 MB
+```
+
 #### [42. 接雨水](https://leetcode-cn.com/problems/trapping-rain-water/)
 
 ```
