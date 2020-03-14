@@ -1,3 +1,75 @@
+#### [300. 最长上升子序列](https://leetcode-cn.com/problems/longest-increasing-subsequence/)
+
+```
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        if (nums.length == 1) {
+            return 1;
+        }
+        int len = 1;
+        int[] d = new int[nums.length + 1];
+        d[1] = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] > d[len]) {
+                d[++len] = nums[i];
+            } else {
+                // binary search
+                int l = 1;
+                int r = len;
+                int pos = 0;
+                while (l <= r) {
+                    int middle = (l + r) / 2;
+                    if (d[middle] < nums[i]) {
+                        pos = middle;
+                        l = middle + 1;
+                    } else {
+                        r = middle - 1;
+                    }
+                }
+                d[pos + 1] = nums[i];
+            }
+        }
+        return len;
+    }
+}
+//runtime:1 ms O(nlogn)
+//memory:38 MB o(n)
+```
+
+```
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        if (nums.length == 1) {
+            return 1;
+        }
+        int[] dp = new int[nums.length];
+        dp[0] = 1;
+        int ans = 0;
+        for (int i = 1; i < nums.length; i++) {
+            int maxval = 0;
+            for (int j = 0; j < i; j++) {
+                if (nums[i] > nums[j]) {
+                    maxval = Math.max(maxval, dp[j]);
+                }
+            }
+            dp[i] = maxval + 1;
+            ans = Math.max(ans, dp[i]);
+        }
+        return ans;
+    }
+}
+//runtime:12 ms O(n^2)
+//memory:37.8 MB O(n)
+```
+
+
+
 #### [169. 多数元素](https://leetcode-cn.com/problems/majority-element/)
 
 ```
