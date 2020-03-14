@@ -1,3 +1,86 @@
+#### [169. 多数元素](https://leetcode-cn.com/problems/majority-element/)
+
+```
+class Solution {
+    public int majorityElement(int[] nums) {
+        // vote idea
+        int count = 0;
+        int compare = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (count == 0) {
+                compare = nums[i];
+            }
+            if (compare == nums[i]) {
+                ++count;
+            } else {
+                --count;
+            }
+        }
+        return compare;
+    }
+}
+//runtime:1 ms O(n)
+//memory:41.8 MB O(1)
+```
+
+```
+class Solution {
+    // divide and conquer
+    public int majorityElement(int[] nums) {
+        return majorityElementRecursive(nums, 0, nums.length - 1);
+    }
+
+    private int majorityElementRecursive(int[] nums, int start, int end) {
+        if (start == end) {
+            return nums[start];
+        }
+        int middle = (start + end) / 2;
+        int left = majorityElementRecursive(nums, start, middle);
+        int right = majorityElementRecursive(nums, middle + 1, end);
+        if (left == right) {
+            return left;
+        } else {
+            int leftCount = calcCount(nums, left, start, middle);
+            int rightCount = calcCount(nums, right, middle + 1, end);
+            return leftCount > rightCount ? left : right;
+        }
+    }
+
+    private int calcCount(int[] nums, int num, int start, int end) {
+        int count = 0;
+        for (int i = start; i <= end; i++) {
+            if (nums[i] == num) {
+                ++count;
+            }
+        }
+        return count;
+    }
+}
+//runtime:2 ms O(nlogn)
+//memory:42 MB O(1)
+```
+
+```
+class Solution {
+    public int majorityElement(int[] nums) {
+        // key: nums[i]; value: count
+        HashMap<Integer, Integer> map = new HashMap(16);
+        for (int i = 0; i < nums.length; i++) {
+            if (map.containsKey(nums[i])) {
+                int count = map.get(nums[i]) + 1;
+                map.put(nums[i], count);
+            } else {
+                map.put(nums[i], 1);
+            }
+        }
+        Map.Entry<Integer, Integer> result = map.entrySet().stream().filter(e -> e.getValue() > Math.floor(nums.length/2)).findAny().orElse(null);
+        return result == null ? -1 : result.getKey();
+    }
+}
+//runtime:24 ms O(n)
+//memory:46.5 MB O(n)
+```
+
 #### [1071. 字符串的最大公因子](https://leetcode-cn.com/problems/greatest-common-divisor-of-strings/)
 
 ```
