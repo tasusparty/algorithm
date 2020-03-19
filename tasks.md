@@ -1,3 +1,48 @@
+#### [409. 最长回文串](https://leetcode-cn.com/problems/longest-palindrome/)
+
+```
+class Solution {
+    public int longestPalindrome(String s) {
+        // count 52 letters
+        int[] letterCounts = getLetterCounts(s);
+        // calc counts
+        int ans = calculateMaxLen(letterCounts);
+        return ans;
+    }
+
+    private int calculateMaxLen(int[] letterCounts) {
+        int evenSum = 0;
+        int oddSum = 0;
+        for (int count : letterCounts) {
+            if (count % 2 == 0) {
+                evenSum += count;
+            } else {
+                // odd - odd = even
+                // final s: n evens + 1 odd
+                if (oddSum == 0) {
+                    oddSum += count;
+                } else {
+                    oddSum += count - 1;
+                }
+            }
+        }
+        return evenSum + oddSum;
+    }
+
+    private int[] getLetterCounts(String s) {
+        int[] letterCounts = new int[52];
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            int idx = c < 'a' ? c - 'A' : c - 'a' + 26;
+            letterCounts[idx] += 1;
+        }
+        return letterCounts;
+    }
+}
+//runtime:3 ms
+//memory:37.9 MB
+```
+
 #### [836. 矩形重叠](https://leetcode-cn.com/problems/rectangle-overlap/)
 
 ```
