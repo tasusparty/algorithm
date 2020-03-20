@@ -1,3 +1,88 @@
+#### [面试题40. 最小的k个数](https://leetcode-cn.com/problems/zui-xiao-de-kge-shu-lcof/)
+
+```
+class Solution {
+    public int[] getLeastNumbers(int[] arr, int k) {
+        if (k == 0 || arr.length == 0) {
+            return new int[0];
+        }
+        return quickSort(arr, 0, arr.length - 1, k - 1);
+    }
+
+    private int[] quickSort(int[] arr, int l, int r, int k) {
+        // k is index
+        int j = partition(arr, l, r);
+        if (j == k) {
+            return Arrays.copyOf(arr, k + 1);
+        }
+        return j < k ? quickSort(arr, j + 1, r, k) : quickSort(arr, l, j - 1, k);
+    }
+
+    private int partition(int[] arr, int l, int r) {
+        int key = arr[l];
+        int i = l;
+        int j = r + 1;
+        while (true) {
+            while(++i <= r && arr[i] < key);
+            while(--j >= l && arr[j] > key);
+            if (i >= j) {
+                break;
+            }
+            int temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
+        arr[l] = arr[j];
+        arr[j] = key;
+        return j;
+    }
+}
+//runtime:2 ms 期望为O(n)
+//memory:42.5 MB O(1)
+```
+
+```
+class Solution {
+    public int[] getLeastNumbers(int[] arr, int k) {
+        if (arr == null || arr.length == 0 || k == 0) {
+            return new int[]{};
+        }
+        Queue<Integer> heap = new PriorityQueue<>(k, (v1, v2) -> Integer.compare(v2, v1));
+        for (int i = 0; i < arr.length; i++) {
+            if (heap.size() < k) {
+                heap.offer(arr[i]);
+            } else {
+                if (heap.peek() > arr[i]) {
+                    heap.poll();
+                    heap.offer(arr[i]);
+                }
+            }
+        }
+        int[] ans = new int[k];
+        int n = 0;
+        for (int num: heap) {
+            ans[n++] = num;
+        }
+        return ans;
+    }
+}
+//runtime:24 ms O(nlogk)
+//memory:43 MB O(K)
+```
+
+```
+class Solution {
+    public int[] getLeastNumbers(int[] arr, int k) {
+        Arrays.sort(arr);
+        int[] ans = new int[k];
+        System.arraycopy(arr, 0, ans, 0, k);
+        return ans;
+    }
+}
+//runtime:7  O(nlogn)
+//memory:43.1 MB O(1)
+```
+
 #### [409. 最长回文串](https://leetcode-cn.com/problems/longest-palindrome/)
 
 ```
