@@ -1,3 +1,190 @@
+
+
+#### [945. 使数组唯一的最小增量](https://leetcode-cn.com/problems/minimum-increment-to-make-array-unique/)
+
+```
+import java.util.Arrays;
+
+class Solution {
+    public int minIncrementForUnique(int[] A) {
+        Arrays.sort(A);
+        int move = 0;
+        for (int i = 1; i < A.length; i++) {
+            if (A[i] <= A[i - 1]) {
+                int t = A[i];
+                A[i] = A[i - 1] + 1;
+                move += A[i] - t;
+            }
+        }
+        return move;
+    }
+}
+//runtime:21 ms O(nlogn)
+//memory:46.8 MB O(1)
+```
+
+```
+class Solution {
+    int[] pos = new int [80000];
+    public int minIncrementForUnique(int[] A) {
+        Arrays.fill(pos, -1); 
+        int move = 0;
+        for (int a: A) {
+            int b = findPos(a);
+            move += b - a;
+        }
+        return move;
+    }
+
+    private int findPos(int a) {
+        int b = pos[a];
+        if (b == -1) {
+            pos[a] = a;
+            return a;
+        }
+        b = findPos(b + 1);
+        pos[a] = b;
+        return b;
+    }
+}
+
+//runtime:15 ms O(N)
+//memory:44.4 MB O(2N)
+```
+
+#### [365. 水壶问题](https://leetcode-cn.com/problems/water-and-jug-problem/)
+
+```
+class Solution {
+    public boolean canMeasureWater(int x, int y, int z) {
+
+        State initState = new State(0, 0);
+        Queue<State> queue = new LinkedList<>();
+        Set<State> visitedStates = new HashSet<>();
+        visitedStates.add(initState);
+
+        queue.offer(initState);
+        while (!queue.isEmpty()) {
+            State head = queue.poll();
+            int curX = head.getX();
+            int curY = head.getY();
+            
+            if (curX == z || curY == z || curX + curY == z) {
+                return true;
+            }
+
+            List<State> nexStates = getNextStates(curX, curY, x, y);
+            
+            // bfs
+            for (State nextState : nexStates) {
+                if (!visitedStates.contains(nextState)) {
+                    queue.offer(nextState);
+                    visitedStates.add(nextState);
+                }
+            }
+        }
+        return false;
+    }
+
+    private List<State> getNextStates(int curX, int curY, int x, int y) {
+        List<State> nextStates = new ArrayList<>(8);
+        // fill full
+        State state1 = new State(x, curY);
+        State state2 = new State(curX, y);
+        // empty
+        State state3 = new State(0, curY);
+        State state4 = new State(curX, 0);
+        // A->B to make B full and A still has some
+        State state5 = new State(curX - (y - curY), y);
+        // A->B to make A empty while B is still not full
+        State state6 = new State(0, curY + curX);
+        // B->A to make A full
+        State state7 = new State(x, curY - (x - curX));
+        // B->A to make B empty
+        State state8 = new State(curX + curY, 0);
+        
+        // A is not full
+        if (curX < x) {
+            nextStates.add(state1);
+        }
+        if (curY < y) {
+            nextStates.add(state2);
+        }
+        
+        // A is not empty
+        if (curX > 0) {
+            nextStates.add(state3);
+        }
+        if (curY > 0) {
+            nextStates.add(state4);
+        }
+        
+        if (curX - (y - curY) > 0) {
+            nextStates.add(state5);
+        }
+
+        if (curY - (x - curX) > 0) {
+            nextStates.add(state7);
+        }
+        
+        if (curY + curX < y) {
+            nextStates.add(state6);
+        }
+
+        if (curY + curX < x) {
+            nextStates.add(state8);
+        }
+        return nextStates;
+    }
+
+    private class State {
+        private int x;
+        private int y;
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            State state = (State) o;
+
+            if (x != state.x) return false;
+            return y == state.y;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = x;
+            result = 31 * result + y;
+            return result;
+        }
+
+        public State(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        public int getX() {
+            return x;
+        }
+
+        public void setX(int x) {
+            this.x = x;
+        }
+
+        public int getY() {
+            return y;
+        }
+
+        public void setY(int y) {
+            this.y = y;
+        }
+    }
+}
+//runtime:583 ms O(XY)
+//memory:108.8 MB O(XY)
+```
+
 #### [面试题40. 最小的k个数](https://leetcode-cn.com/problems/zui-xiao-de-kge-shu-lcof/)
 
 ```
